@@ -24,6 +24,8 @@ for filepath in filepaths:
 
     df = pd.read_excel(filepath, sheet_name="Sheet 1")
 
+    total_invoice = df['total_price'].sum()
+
     #Add headers
     columns = df.columns
     columns = [item.replace("_", " ").title() for item in columns]
@@ -44,5 +46,20 @@ for filepath in filepaths:
         pdf.cell(w=32, h=8, txt=str(row["amount_purchased"]), border=1)
         pdf.cell(w=30, h=8, txt=str(row["price_per_unit"]), border=1)
         pdf.cell(w=30, h=8, txt=str(row["total_price"]), border=1, ln=1)
+
+    pdf.cell(w=30, h=8, txt="", border=1)
+    pdf.cell(w=70, h=8, txt="", border=1)
+    pdf.cell(w=32, h=8, txt="", border=1)
+    pdf.cell(w=30, h=8, txt="", border=1)
+    pdf.cell(w=30, h=8, txt=str(total_invoice), border=1, ln=1)
+
+    #Add total sum below grid
+    pdf.set_font(family="Times", size=10, style="B")
+    pdf.cell(w=30, h=8, txt=f"The total amount due is ${total_invoice}", ln=1)
+
+    #Company name and logo
+    pdf.set_font(family="Times", size=14, style="B")
+    pdf.cell(w=30, h=8, txt=f"PythonHow")
+    pdf.image("pythonhow.png", w=10)
 
     pdf.output(f"PDFs/{filename}.pdf")
